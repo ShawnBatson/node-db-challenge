@@ -3,10 +3,11 @@ exports.up = async function (knex) {
         table.increments("id");
         table.text("name").notNullable();
         table.text("description");
+        table.boolean("completed").notNullable().defaultTo(false); //come back
     });
     await knex.schema.createTable("resources", (table) => {
         table.increments("id");
-        table.text("name").notNullable();
+        table.text("name").notNullable().unique();
         table.text("description");
     });
     await knex.schema.createTable("projects_resources", (table) => {
@@ -19,6 +20,7 @@ exports.up = async function (knex) {
         table.text("description").notNullable();
         table.text("notes");
         table.integer("projects_id").references("id").inTable("projects");
+        table.boolean("completed").notNullable().defaultTo(false);
     });
 };
 
