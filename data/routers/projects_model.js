@@ -12,9 +12,11 @@ function getTaskList(projects_id) {
     return db("tasks as t")
         .leftJoin("projects as p", "p.id", "t.projects_id")
         .where("t.projects_id", projects_id)
-        .select("p.name", "t.description", "t.notes");
+        .select("p.name", "p.description", "t.*");
 }
+
 module.exports = {
     getProjects,
     getResources,
+    getTaskList,
 };
