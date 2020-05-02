@@ -17,8 +17,8 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
-        projectsModel.getTaskList(id).then((tasks) => {
-            res.json(tasks);
+        projectsModel.getProjectsById(id).then((project) => {
+            res.json(project);
         });
     } catch (err) {
         next(err);
