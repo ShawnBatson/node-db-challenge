@@ -34,11 +34,35 @@ function getTaskList(projects_id) {
 //         );
 // }
 
+// function getProjectsById(project_id) {
+//     return db("projects as p")
+//         .join("projects_resources as pr", "pr.projects_id", "p.id")
+//         .where("pr.projects_id", project_id)
+//         .select("p.id", "p.name", "p.description", "p.completed");
+// }
+
 function getProjectsById(project_id) {
     return db("projects as p")
-        .join("projects_resources as pr", "pr.projects_id", "p.id")
-        .where("pr.projects_id", project_id)
-        .select("p.id", "p.name", "p.description", "p.completed");
+        .where("p.id", project_id)
+        .select("p.id", "p.name")
+        .then((project_info) => {
+            return db("tasks as t")
+                .where("t.projects_id", project_id)
+                .select("t.description", "t.notes")
+                .then((tasks) => {
+                    return db("projects_resources as pr")
+                        .where("projects_id", project_id)
+                        .join("resources as r", "r.id", "pr.resources_id")
+                        .select("r.name")
+                        .then((resources) => {
+                            return {
+                                project_info,
+                                tasks,
+                                resources,
+                            };
+                        });
+                });
+        });
 }
 
 // function getProjectTasksById(project_id) {
